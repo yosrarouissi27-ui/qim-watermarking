@@ -10,7 +10,7 @@ SECRET_KEY = 42
 DELTA = 20
 
 # ─── Taille du watermark (bits) ──────────────────────────────────────────────
-WATERMARK_BITS = 64
+WATERMARK_BITS = 128
 
 # ─── Chemin de l'image hôte par défaut ───────────────────────────────────────
 # L'image doit être en niveaux de gris ou sera convertie automatiquement
