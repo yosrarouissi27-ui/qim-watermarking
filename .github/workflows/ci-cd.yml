@@ -35,5 +35,23 @@ jobs:
 
       - name: Build & Push Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/qim-watermarking:latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/qim-watermarking:${{ github.sha }} .
+          docker tag ${{ secrets.DOCKER_USERNAME }}/qim-watermarking:${{ github.sha }} \
+                     ${{ secrets.DOCKER_USERNAME }}/qim-watermarking:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/qim-watermarking:${{ github.sha }}
           docker push ${{ secrets.DOCKER_USERNAME }}/qim-watermarking:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'qim-watermarking-app'
+          images: '${{ secrets.DOCKER_USERNAME }}/qim-watermarking:latest'
