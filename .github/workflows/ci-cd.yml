@@ -1,7 +1,7 @@
 name: CI/CD QIM Watermarking
 
 on:
-  push:
+  push: 
     branches: [main]
 
 jobs:
